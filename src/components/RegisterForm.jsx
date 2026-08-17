@@ -1,8 +1,21 @@
 import React from "react";
 import { useContextData } from '../Context/AuthContext'
+import { useForm } from "react-hook-form";
 
 
 const RegisterForm = () => {
+
+  const {
+    register,
+    handleSubmit,
+    formState:{errors}
+  } = useForm();
+
+
+   const onSubmit = (data) => {
+    console.log("Register Data:", data);
+  };
+
   const {setToggle} = useContextData();
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
@@ -19,13 +32,14 @@ const RegisterForm = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
           {/* Username */}
           <div>
             <label
               htmlFor="username"
               className="block text-sm font-medium text-slate-300 mb-2"
+              
             >
               Username
             </label>
@@ -36,6 +50,9 @@ const RegisterForm = () => {
               name="username"
               placeholder="Enter your username"
               className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+              {...register("username",
+                {required:"username is required"}
+              )}
             />
           </div>
 
@@ -44,6 +61,7 @@ const RegisterForm = () => {
             <label
               htmlFor="email"
               className="block text-sm font-medium text-slate-300 mb-2"
+              
             >
               Email
             </label>
@@ -54,6 +72,10 @@ const RegisterForm = () => {
               name="email"
               placeholder="Enter your email"
               className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+              {...register("email",{
+                required:"email is req",
+               
+              })}
             />
           </div>
 
@@ -62,6 +84,7 @@ const RegisterForm = () => {
             <label
               htmlFor="password"
               className="block text-sm font-medium text-slate-300 mb-2"
+              
             >
               Password
             </label>
@@ -72,7 +95,19 @@ const RegisterForm = () => {
               name="password"
               placeholder="Enter your password"
               className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+              {...register("password",{
+                required:"user password is req",
+                 minLength:{
+                  value:6,
+                  message:"min length of 6"
+                }
+              })}
             />
+               {errors.password && (
+              <p className="text-red-400 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Button */}

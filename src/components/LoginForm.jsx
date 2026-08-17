@@ -2,8 +2,12 @@ import React from "react";
 import { useContextData } from '../Context/AuthContext'
 
 
+
 const LoginForm = () => {
   const {setToggle} = useContextData();
+
+  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
       <div className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-8">
