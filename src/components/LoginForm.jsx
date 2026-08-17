@@ -1,12 +1,51 @@
 import React from "react";
 import { useContextData } from '../Context/AuthContext'
+import {useForm} from "react-hook-form"
+import { toast } from "react-hot-toast";
 
 
 
 const LoginForm = () => {
-  const {setToggle} = useContextData();
 
-  
+  const {register,
+    handleSubmit,
+    formState:{errors}
+  } = useForm();
+
+  const {setToggle,
+    logedInUser,
+    registeredUser,
+    setLogedInUser
+  } = useContextData();
+
+ const loginHandler = (data) => {
+  console.log("Login data:", data);
+  console.log("Registered users:", registeredUser);
+
+  const user = registeredUser.find(
+    (val) =>
+      val.email === data.email &&
+      val.password === data.password
+  );
+
+  console.log("Found user:", user);
+
+  if (!user) {
+    toast.error("Invalid credentials");
+    return;
+  }
+
+  localStorage.setItem(
+    "logedInUser",
+    JSON.stringify(user)
+  );
+
+  setLogedInUser(user);
+
+  toast.success("Logged in successfully");
+};
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
@@ -23,7 +62,9 @@ const LoginForm = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form className="space-y-5"
+        onSubmit={handleSubmit(loginHandler)}
+        >
 
           {/* Email */}
           <div>
@@ -39,6 +80,9 @@ const LoginForm = () => {
               id="email"
               name="email"
               placeholder="Enter your email"
+              {...register("email", {
+                required: "Email is required",
+              })}
               className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
             />
           </div>
@@ -57,8 +101,18 @@ const LoginForm = () => {
               id="password"
               name="password"
               placeholder="Enter your password"
+               autoComplete="current-password"
+              {...register("password", {
+                required: "Password is required",
+              })}
+              
               className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
             />
+             {errors.password && (
+              <p className="text-red-400 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Forgot Password */}
