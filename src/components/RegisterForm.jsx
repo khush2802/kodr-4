@@ -1,6 +1,8 @@
 import React from "react";
 import { useContextData } from '../Context/AuthContext'
 import { useForm } from "react-hook-form";
+import { nanoid } from "nanoid";
+import { toast } from "react-hot-toast";
 
 
 const RegisterForm = () => {
@@ -11,12 +13,33 @@ const RegisterForm = () => {
     formState:{errors}
   } = useForm();
 
+  const {setToggle,
+    registeredUser, 
+    setRegisteredUser
+  } = useContextData();
 
-   const onSubmit = (data) => {
-    console.log("Register Data:", data);
+
+
+   const registerHandler = (data) => {
+    const user = {
+      ...data,
+      id: nanoid()
+    };
+
+    const updatedData = [...registeredUser, user];
+
+    setRegisteredUser(updatedData);
+
+    localStorage.setItem("registeredUser",
+      JSON.stringify(updatedData)
+    );
+
+     toast.success("User registered successfully!");
+
+    setToggle((prev) => !prev);
+    // console.log("Register Data:", data);
   };
 
-  const {setToggle} = useContextData();
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
       <div className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-8">
@@ -32,7 +55,7 @@ const RegisterForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(registerHandler)} className="space-y-5">
 
           {/* Username */}
           <div>
@@ -45,16 +68,16 @@ const RegisterForm = () => {
             </label>
 
             <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Enter your username"
-              className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
-              {...register("username",
-                {required:"username is required"}
-              )}
-            />
-          </div>
+           type="text"
+           id="username"
+           placeholder="Enter your username"
+           autoComplete="username"
+           {...register("username", {
+             required: "Username is required",
+           })}
+           className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+         />
+                   </div>
 
           {/* Email */}
           <div>
@@ -79,36 +102,36 @@ const RegisterForm = () => {
             />
           </div>
 
-          {/* Password */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-slate-300 mb-2"
-              
-            >
-              Password
-            </label>
+         {/* Password */}
+<div>
+  <label
+    htmlFor="password"
+    className="block text-sm font-medium text-slate-300 mb-2"
+  >
+    Password
+  </label>
 
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
-              {...register("password",{
-                required:"user password is req",
-                 minLength:{
-                  value:6,
-                  message:"min length of 6"
-                }
-              })}
-            />
-               {errors.password && (
-              <p className="text-red-400 text-sm mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+  <input
+    type="password"
+    id="password"
+    placeholder="Enter your password"
+    autoComplete="new-password"
+    {...register("password", {
+      required: "Password is required",
+      minLength: {
+        value: 6,
+        message: "Password must be at least 6 characters",
+      },
+    })}
+    className="w-full px-4 py-3 bg-[#0f172a] border border-slate-700 rounded-lg text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"
+  />
+
+  {errors.password && (
+    <p className="text-red-400 text-sm mt-1">
+      {errors.password.message}
+    </p>
+  )}
+</div>
 
           {/* Button */}
           <button

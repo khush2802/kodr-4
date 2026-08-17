@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "nanoid": "^6.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.85.0",
+    "react-hot-toast": "^2.6.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
