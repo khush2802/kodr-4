@@ -1,52 +1,16 @@
 import React from "react";
-import { useContextData } from '../Context/AuthContext'
-import {useForm} from "react-hook-form"
-import { toast } from "react-hot-toast";
-
+import { useAuth } from "../hooks/useAuth";
 
 
 const LoginForm = () => {
 
-  const {register,
+   const {
     handleSubmit,
-    formState:{errors}
-  } = useForm();
-
-  const {setToggle,
-    logedInUser,
-    registeredUser,
-    setLogedInUser
-  } = useContextData();
-
- const loginHandler = (data) => {
-  console.log("Login data:", data);
-  console.log("Registered users:", registeredUser);
-
-  const user = registeredUser.find(
-    (val) =>
-      val.email === data.email &&
-      val.password === data.password
-  );
-
-  console.log("Found user:", user);
-
-  if (!user) {
-    toast.error("Invalid credentials");
-    return;
-  }
-
-  localStorage.setItem(
-    "logedInUser",
-    JSON.stringify(user)
-  );
-
-  setLogedInUser(user);
-
-  toast.success("Logged in successfully");
-};
-
-
-
+    register,
+    errors,
+    loginHandler,
+    setToggle,
+  } = useAuth();
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
       <div className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-8">

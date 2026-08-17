@@ -1,45 +1,16 @@
 import React from "react";
-import { useContextData } from '../Context/AuthContext'
-import { useForm } from "react-hook-form";
-import { nanoid } from "nanoid";
-import { toast } from "react-hot-toast";
+import { useAuth } from "../hooks/useAuth";
 
 
 const RegisterForm = () => {
 
   const {
-    register,
     handleSubmit,
-    formState:{errors}
-  } = useForm();
-
-  const {setToggle,
-    registeredUser, 
-    setRegisteredUser
-  } = useContextData();
-
-
-
-   const registerHandler = (data) => {
-    const user = {
-      ...data,
-      id: nanoid()
-    };
-
-    const updatedData = [...registeredUser, user];
-
-    setRegisteredUser(updatedData);
-
-    localStorage.setItem("registeredUser",
-      JSON.stringify(updatedData)
-    );
-
-     toast.success("User registered successfully!");
-
-    setToggle((prev) => !prev);
-    // console.log("Register Data:", data);
-  };
-
+    register,
+    errors,
+    registerHandler,
+    setToggle,
+  } = useAuth();
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] px-4">
       <div className="w-full max-w-md bg-[#1e293b] border border-slate-700 rounded-2xl shadow-2xl p-8">
